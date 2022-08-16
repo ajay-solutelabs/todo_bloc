@@ -1,6 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app/feature/todo/cubit/task_cubit.dart';
 import 'package:todo_app/feature/todo/models/task/task.dart';
+import 'package:todo_app/feature/todo/repository/api_repository.dart';
 import 'package:todo_app/utils/routes_generator.dart';
 
 import 'feature/todo/bloc/bloc_exports.dart';
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => TaskBloc()),
+        BlocProvider(create: (_) => TaskCubit(ApiRepository())),
         BlocProvider(
             create: (_) => ConnectivityCubit(connectivity: Connectivity()))
       ],
