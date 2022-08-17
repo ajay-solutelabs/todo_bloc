@@ -2,8 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:todo_app/feature/todo/models/task/task.dart';
-import 'package:todo_app/feature/todo/repository/api_repository.dart';
+import 'package:todo_app/feature_todo/data_layer/models/task/task.dart';
+import 'package:todo_app/feature_todo/domain_layer/repository/api_repository.dart';
+
+
 
 part 'task_state.dart';
 
