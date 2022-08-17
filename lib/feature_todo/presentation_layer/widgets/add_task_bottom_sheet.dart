@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/feature/todo/bloc/bloc_exports.dart';
-import 'package:todo_app/feature/todo/cubit/task_cubit.dart';
-import 'package:todo_app/feature/todo/models/task/task.dart';
+import 'package:todo_app/feature_todo/data_layer/models/task/task.dart';
+import 'package:todo_app/feature_todo/presentation_layer/bloc/bloc_exports.dart';
+import 'package:todo_app/feature_todo/presentation_layer/bloc/cubit/task_cubit.dart';
 import 'package:todo_app/utils/guid_gen.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {

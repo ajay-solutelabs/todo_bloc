@@ -1,5 +1,5 @@
-import 'package:todo_app/feature/todo/Services/api_provider.dart';
-import 'package:todo_app/feature/todo/models/task/task.dart';
+
+import 'package:todo_app/feature_todo/domain_layer/Services/api_provider.dart';
 
 class ApiRepository {
   final _provider = ApiProvider();

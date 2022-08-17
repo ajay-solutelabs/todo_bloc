@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app/feature/todo/cubit/task_cubit.dart';
-import 'package:todo_app/feature/todo/models/task/task.dart';
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart'
     as shadow;
-import 'package:todo_app/feature/todo/repository/api_repository.dart';
-import 'package:todo_app/feature/todo/ui/network_disconnect_screen.dart';
-import 'package:todo_app/feature/todo/widgets/add_task_bottom_sheet.dart';
-import 'package:todo_app/feature/todo/widgets/drawer.dart';
-
-// import '../bloc/bloc_exports.dart';
+import 'package:todo_app/feature_todo/data_layer/models/task/task.dart';
+import 'package:todo_app/feature_todo/presentation_layer/bloc/cubit/task_cubit.dart';
+import 'package:todo_app/feature_todo/presentation_layer/widgets/add_task_bottom_sheet.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = "/homepage";
@@ -71,7 +66,7 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         } else if(state is TaskLoaded){
-          List<Task?>? list = state.allTasks;
+          List<Task?>? list = state.allTasks?.cast<Task?>();
 
           return Scaffold(
             appBar: AppBar(

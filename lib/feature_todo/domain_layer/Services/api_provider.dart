@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:todo_app/feature/todo/models/task/task.dart';
+import 'package:todo_app/feature_todo/data_layer/models/task/task.dart';
 
 class ApiProvider {
   final Dio _dio = Dio();

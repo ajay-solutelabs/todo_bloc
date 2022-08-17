@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/feature/todo/ui/home.dart';
-import 'package:todo_app/feature/todo/ui/recycle_bin.dart';
+import 'package:todo_app/feature_todo/presentation_layer/views/home.dart';
+import 'package:todo_app/feature_todo/presentation_layer/views/recycle_bin.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({Key? key}) : super(key: key);

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart' as shadow;
-import 'package:todo_app/feature/todo/bloc/bloc_exports.dart';
-import 'package:todo_app/feature/todo/widgets/drawer.dart';
+import 'package:todo_app/feature_todo/data_layer/models/task/task.dart';
+import 'package:todo_app/feature_todo/presentation_layer/widgets/drawer.dart';
 
-import '../models/task/task.dart';
+import '../../presentation_layer/bloc/bloc_exports.dart';
+
 
 class RecycleBin extends StatelessWidget {
   static const String routeName = "/recycle_bin";
@@ -15,7 +16,7 @@ class RecycleBin extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state) {
-        List<Task?> list = state.removedTask;
+        List<Task?>? list = state.removedTask.cast<Task?>();
         return Scaffold(
           appBar: AppBar(
             title: const Text("TODO App"),
