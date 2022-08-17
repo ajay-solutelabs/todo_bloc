@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/feature/todo/bloc/bloc_exports.dart';
-import 'package:todo_app/feature/todo/bloc/bloc_exports.dart';
 
 class NetworkDisconnectedScreen extends StatefulWidget {
   static const routeName = "/no_network";

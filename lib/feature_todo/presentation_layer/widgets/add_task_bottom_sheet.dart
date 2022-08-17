@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/feature/todo/bloc/bloc_exports.dart';
-import 'package:todo_app/feature/todo/models/task/task.dart';
+import 'package:todo_app/feature_todo/data_layer/models/task/task.dart';
+import 'package:todo_app/feature_todo/presentation_layer/bloc/bloc_exports.dart';
+import 'package:todo_app/feature_todo/presentation_layer/bloc/cubit/task_cubit.dart';
 import 'package:todo_app/utils/guid_gen.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
@@ -47,7 +48,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 ElevatedButton(
                   onPressed: () {
                     var task = Task(title: titleController.text, id: UUIDGen.generate());
-                    context.read<TaskBloc>().add(AddTask(task: task));
+                    context.read<TaskCubit>().addTask(task);
                     Navigator.pop(context);
                   },
                   child: const Text('Add'),

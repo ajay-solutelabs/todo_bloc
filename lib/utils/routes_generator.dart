@@ -1,10 +1,10 @@
-export 'package:todo_app/feature/todo/ui/home.dart';
+export 'package:todo_app/feature_todo/presentation_layer/views/home.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/feature/todo/ui/home.dart';
-import 'package:todo_app/feature/todo/ui/network_disconnect_screen.dart';
-import 'package:todo_app/feature/todo/ui/recycle_bin.dart';
+import 'package:todo_app/feature_todo/presentation_layer/views/home.dart';
+import 'package:todo_app/feature_todo/presentation_layer/views/network_disconnect_screen.dart';
+import 'package:todo_app/feature_todo/presentation_layer/views/recycle_bin.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings routeSettings) {
