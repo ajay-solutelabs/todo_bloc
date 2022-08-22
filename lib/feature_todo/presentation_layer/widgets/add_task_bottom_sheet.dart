@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/feature/todo/bloc/bloc_exports.dart';
-import 'package:todo_app/feature/todo/models/task/task.dart';
+import 'package:todo_app/feature_todo/data_layer/models/task/task.dart';
+import 'package:todo_app/feature_todo/presentation_layer/bloc/bloc_exports.dart';
+import 'package:todo_app/feature_todo/presentation_layer/bloc/cubit/task_cubit.dart';
 import 'package:todo_app/utils/guid_gen.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
@@ -29,6 +30,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               padding: const EdgeInsets.symmetric(
                   horizontal: 18.0, vertical: 10),
               child: TextField(
+                key: const Key('addTitle'),
                 autofocus: true,
                 controller: titleController,
                 decoration: const InputDecoration(
@@ -45,9 +47,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   child: const Text('Cancel',style: TextStyle(color: Colors.redAccent),),
                 ),
                 ElevatedButton(
+                  key: const Key('addButton'),
                   onPressed: () {
                     var task = Task(title: titleController.text, id: UUIDGen.generate());
-                    context.read<TaskBloc>().add(AddTask(task: task));
+                    context.read<TaskCubit>().addTask(task);
                     Navigator.pop(context);
                   },
                   child: const Text('Add'),

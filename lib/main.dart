@@ -1,10 +1,13 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/feature/todo/models/task/task.dart';
+import 'package:todo_app/feature_todo/domain_layer/repository/api_repository.dart';
+import 'package:todo_app/feature_todo/presentation_layer/bloc/cubit/task_cubit.dart';
+import 'package:todo_app/feature_todo/presentation_layer/views/home.dart';
+import 'package:todo_app/feature_todo/presentation_layer/views/network_disconnect_screen.dart';
 import 'package:todo_app/utils/routes_generator.dart';
 
-import 'feature/todo/bloc/bloc_exports.dart';
-import 'feature/todo/ui/network_disconnect_screen.dart';
+import 'feature_todo/presentation_layer/bloc/bloc_exports.dart';
+
 
 void main() async {
   BlocOverrides.runZoned(
@@ -23,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => TaskBloc()),
+        BlocProvider(create: (_) => TaskCubit(ApiRepository())),
         BlocProvider(
             create: (_) => ConnectivityCubit(connectivity: Connectivity()))
       ],

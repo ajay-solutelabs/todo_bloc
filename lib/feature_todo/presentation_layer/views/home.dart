@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/feature/todo/models/task/task.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart'
     as shadow;
-import 'package:todo_app/feature/todo/ui/network_disconnect_screen.dart';
-import 'package:todo_app/feature/todo/widgets/add_task_bottom_sheet.dart';
-import 'package:todo_app/feature/todo/widgets/drawer.dart';
-
-import '../bloc/bloc_exports.dart';
+import 'package:todo_app/feature_todo/data_layer/models/task/task.dart';
+import 'package:todo_app/feature_todo/presentation_layer/bloc/cubit/task_cubit.dart';
+import 'package:todo_app/feature_todo/presentation_layer/widgets/add_task_bottom_sheet.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = "/homepage";
@@ -20,19 +18,16 @@ class _HomePageState extends State<HomePage> {
   bool isPressed = true;
 
   final backgroundColor = const Color(0xFFE7ECEF);
-  TaskBloc bloc = TaskBloc();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    bloc.add(const GetAllTask());
   }
 
   @override
   Widget build(BuildContext context) {
-    // Offset distance = isPressed ? const Offset(10, 10) : const Offset(15, 15);
-    // double blur = isPressed ? 5.0 : 25.0;
+    context.read<TaskCubit>().getAllTask();
 
     void _showModalBottomSheet(BuildContext context) {
       showModalBottomSheet(
@@ -42,9 +37,9 @@ class _HomePageState extends State<HomePage> {
           });
     }
 
-    return BlocBuilder<TaskBloc, TaskState>(
+    return BlocBuilder<TaskCubit, TaskState>(
       builder: (context, state) {
-        if(state is TaskLoadingState) {
+        if(state is TaskLoading) {
           return Container(
             color: Colors.white,
             child: Column(
@@ -70,16 +65,78 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           );
-        } else {
-          List<Task?> list = state.allTasks;
-          List<Task?> completedTask = state.completedTask;
+        } else if(state is TaskLoaded){
+          List<Task?>? list = state.allTasks?.cast<Task?>();
 
           return Scaffold(
             appBar: AppBar(
               title: const Text("TODO App"),
               backgroundColor: Colors.blueGrey,
             ),
-            drawer: const DrawerWidget(),
+            body: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    child: Text('Todo:',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: list?.length,
+                        itemBuilder: (context, index) {
+                          var task = list?[index];
+                          return task?.isDone != true ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 18.0, vertical: 10),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: backgroundColor,
+                                  boxShadow: const [
+                                    shadow.BoxShadow(
+                                      blurRadius: 10,
+                                      offset: Offset(10, 10),
+                                      color: Color(0xFFA7A9AF),
+                                      inset: true,
+                                    ),
+                                  ]),
+                              child: ListTile(
+                                title: Text(
+                                  "${task?.title}",
+                                ),
+                                trailing: Checkbox(
+                                  value: task?.isDone ?? false,
+                                  onChanged: (val) => context
+                                      .read<TaskCubit>().updateTask(task!, false),),
+                                onLongPress: () => context
+                                    .read<TaskCubit>().removeTask(task!),
+                              ),
+                            ),
+                          ) : SizedBox();
+                        }),
+                  ),
+                  const Divider(
+                    thickness: 1,
+                  ),
+                ],
+              ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              key: const Key('bottomSheet'),
+              child: const Icon(Icons.add),
+              onPressed: () => _showModalBottomSheet(context),
+            ), // This trailing comma makes auto-formatting nicer for build methods.
+          );
+        } else {
+          List<Task?>? list = [];
+
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("TODO App"),
+              backgroundColor: Colors.blueGrey,
+            ),
             body: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,14 +170,12 @@ class _HomePageState extends State<HomePage> {
                                 title: Text(
                                   "${task?.title}",
                                 ),
-                                trailing: Checkbox(
+                                trailing:  Checkbox(
                                   value: task?.isDone ?? false,
                                   onChanged: (val) => context
-                                      .read<TaskBloc>()
-                                      .add(UpdateTask(task: task!,isCompleted: false),),),
+                                      .read<TaskCubit>().updateTask(task!, false),),
                                 onLongPress: () => context
-                                    .read<TaskBloc>()
-                                    .add(RemoveTask(task: task!)),
+                                    .read<TaskCubit>().removeTask(task!),
                               ),
                             ),
                           ) : SizedBox();
@@ -129,51 +184,11 @@ class _HomePageState extends State<HomePage> {
                   const Divider(
                     thickness: 1,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    child: Text('Completed:',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: completedTask.length,
-                        itemBuilder: (context, index) {
-                          var task = completedTask[index];
-                          return task?.isDone != false ? Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 18.0, vertical: 10),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: backgroundColor,
-                                  boxShadow: const [
-                                    shadow.BoxShadow(
-                                      blurRadius: 10,
-                                      offset: Offset(10, 10),
-                                      color: Color(0xFFA7A9AF),
-                                      inset: true,
-                                    ),
-                                  ]),
-                              child: ListTile(
-                                title: Text(
-                                  "${task?.title}",
-                                ),
-                                trailing: Checkbox(
-                                  value: task?.isDone,
-                                  onChanged: (val) => context
-                                      .read<TaskBloc>()
-                                      .add(UpdateTask(task: task!, isCompleted: true),),),
-                                onLongPress: () => context
-                                    .read<TaskBloc>()
-                                    .add(RemoveTask(task: task!)),
-                              ),
-                            ),
-                          ) : const SizedBox();
-                        }),
-                  )
                 ],
               ),
             ),
             floatingActionButton: FloatingActionButton(
+              key: const Key('bottomSheet'),
               child: const Icon(Icons.add),
               onPressed: () => _showModalBottomSheet(context),
             ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -183,41 +198,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-// Widget neumorphic() {
-//   return Padding(
-//     padding: const EdgeInsets.all(8.0),
-//     child: GestureDetector(
-//       onTap: () {
-//         setState(() {
-//           isPressed = !isPressed;
-//         });
-//       },
-//       child: AnimatedContainer(
-//         duration: const Duration(milliseconds: 100),
-//         decoration: shadow.BoxDecoration(
-//             borderRadius: BorderRadius.circular(5),
-//             color: Colors.grey.shade300,
-//             boxShadow: [
-//               shadow.BoxShadow(
-//                 blurRadius: blur,
-//                 offset: -distance,
-//                 color: Colors.white,
-//                 inset: isPressed,
-//               ),
-//               shadow.BoxShadow(
-//                 blurRadius: blur,
-//                 offset: distance,
-//                 color: Color(0xFFA7A9AF),
-//                 inset: isPressed,
-//               ),
-//             ]
-//         ),
-//         child: Padding(
-//           padding: const EdgeInsets.all(12.0),
-//           child: const Icon(Icons.add),
-//         ),
-//       ),
-//     ),
-//   );
-// }

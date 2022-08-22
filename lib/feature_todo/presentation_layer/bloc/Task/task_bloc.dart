@@ -1,9 +1,9 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/feature/todo/bloc/bloc_exports.dart';
-import 'package:todo_app/feature/todo/models/task/task.dart';
-import 'package:todo_app/feature/todo/repository/api_repository.dart';
+import 'package:todo_app/feature_todo/data_layer/models/task/task.dart';
+import 'package:todo_app/feature_todo/domain_layer/repository/api_repository.dart';
+import '../bloc_exports.dart';
 
 part 'task_event.dart';
 part 'task_state.dart';
@@ -25,19 +25,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     try {
       emit(TaskLoadingState());
       final mList = await _apiRepository.fetchTaskList();
-      // emit(TaskState(allTasks: List.from(state.allTasks)..addAll(mList),removedTask: state.removedTask));
       List<Task> allTask = List.from(state.allTasks)..addAll(mList)..toSet().toList();
-      // final allTasks = allTask.map((e) {
-      //   if(e.isDone == false){
-      //     return e;
-      //   }
-      // }).toList();
-      // final completedTasks = allTask.map((e) {
-      //   if(e.isDone == true){
-      //     return e;
-      //   }
-      // }).toList();
-
       emit(TaskState(allTasks:  mList, removedTask: List.from(state.removedTask),completedTask: List.from(allTask)));
     } catch(e) {
       debugPrint("$e");
