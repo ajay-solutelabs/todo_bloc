@@ -124,6 +124,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             floatingActionButton: FloatingActionButton(
+              key: const Key('bottomSheet'),
               child: const Icon(Icons.add),
               onPressed: () => _showModalBottomSheet(context),
             ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -187,6 +188,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             floatingActionButton: FloatingActionButton(
+              key: const Key('bottomSheet'),
               child: const Icon(Icons.add),
               onPressed: () => _showModalBottomSheet(context),
             ), // This trailing comma makes auto-formatting nicer for build methods.

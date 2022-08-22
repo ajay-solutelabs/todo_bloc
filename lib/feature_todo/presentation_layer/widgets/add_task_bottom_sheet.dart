@@ -30,6 +30,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               padding: const EdgeInsets.symmetric(
                   horizontal: 18.0, vertical: 10),
               child: TextField(
+                key: const Key('addTitle'),
                 autofocus: true,
                 controller: titleController,
                 decoration: const InputDecoration(
@@ -46,6 +47,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   child: const Text('Cancel',style: TextStyle(color: Colors.redAccent),),
                 ),
                 ElevatedButton(
+                  key: const Key('addButton'),
                   onPressed: () {
                     var task = Task(title: titleController.text, id: UUIDGen.generate());
                     context.read<TaskCubit>().addTask(task);
